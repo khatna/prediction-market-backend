@@ -1,9 +1,12 @@
 from typing import Union
 from fastapi import FastAPI
 
-app = FastAPI()
+from lib import markets
 
-@app.get("/")
+app = FastAPI()
+market_store = markets.MarketStore()
+
+@app.get("/markets")
 def read_root():
   return { "Hello": "world" }
 
