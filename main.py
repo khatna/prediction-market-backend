@@ -8,7 +8,7 @@ market_store = markets.MarketStore()
 
 @app.get("/markets")
 def read_root():
-  return { "Hello": "world" }
+  return market_store.get_all_markets()
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
