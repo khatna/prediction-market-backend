@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from lib import market_store
-from lib.models import MarketSeedData, MarketData, Bet, BetResponse
+from src import market_store
+from src.models import MarketSeedData, MarketData, Bet, BetResponse
 
 market_store = market_store.MarketStore()
 
