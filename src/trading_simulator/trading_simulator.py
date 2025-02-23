@@ -8,14 +8,14 @@ from .. import market_store
 @dataclass
 class SimulatedTrader:
   name: str
-  bias: float  # Tendency to bet yes (0-1)
+  bias: float
   activity_level: float  # Probability they decide to trade
   
   async def decide_trade(self, ground_truths, market_data):
     if random.random() > self.activity_level:
       return None
             
-    perceived_probability = (ground_truths[market_data.id] + self.bias) / 2    
+    perceived_probability = ground_truths[market_data.id] + self.bias
     is_yes = perceived_probability > market_data.probability
     stake = round(random.uniform(5, 20), 2)
 
@@ -30,10 +30,10 @@ class TradingSimulator:
     self.ground_truths = dict()
     self.market_store = market_store
     self.traders = [
-      SimulatedTrader("Optimist", bias=0.8, activity_level=0.3),
-      SimulatedTrader("Pessimist", bias=0.2, activity_level=0.3),
-      SimulatedTrader("Balanced", bias=0.5, activity_level=0.5),
-      SimulatedTrader("FrequentTrader", bias=0.5, activity_level=0.8),
+      SimulatedTrader("Optimist", bias=0.10, activity_level=0.3),
+      SimulatedTrader("Pessimist", bias=-0.10, activity_level=0.3),
+      SimulatedTrader("Balanced", bias=0, activity_level=0.5),
+      SimulatedTrader("FrequentTrader", bias=0, activity_level=0.8),
     ]
     self.is_running = False
     for market in market_store.get_all_markets():
@@ -51,7 +51,6 @@ class TradingSimulator:
     self.ground_truths[market_id] = min(max(new_prob, 0), 1)
 
   async def run_trading_cycle(self):
-    print(self.ground_truths)
     markets = self.market_store.get_all_markets()
     for market in markets:
       self.update_ground_truth(market.id)
