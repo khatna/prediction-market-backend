@@ -1,8 +1,12 @@
+import asyncio
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src import market_store
 from src.models import MarketSeedData, MarketData, Bet, BetResponse
+from src.trading_simulator import trading_simulator
 
 market_store = market_store.MarketStore()
 
@@ -10,7 +14,8 @@ market_store = market_store.MarketStore()
 questions = [
   'Will Bitcoin hit $250k in 2025?',
   'Will it rain in London tomorrow?',
-  'Will the Republicans win the 2028 election?'
+  'Will the Republicans win the 2028 election?',
+  'Will Liverpool win the 2025 UCL?',
 ]
 
 for q in questions:
@@ -20,8 +25,18 @@ for q in questions:
       initial_probability=0.5
     ),
   )
-  
-app = FastAPI()
+
+# seed some traders
+simulator = trading_simulator.TradingSimulator(market_store)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+  task = asyncio.create_task(simulator.run_simulation())
+  yield
+  await simulator.stop_simulation()
+  await task
+
+app = FastAPI(lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
