@@ -4,9 +4,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src import market_store
-from src.models import MarketSeedData, MarketData, Bet, BetResponse
-from src.trading_simulator import trading_simulator
+from .src import market_store
+from .src.models import MarketSeedData, MarketData, Bet, BetResponse
+from .src.trading_simulator import trading_simulator
 
 market_store = market_store.MarketStore()
 
