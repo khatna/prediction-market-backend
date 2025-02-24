@@ -75,6 +75,6 @@ class CPMM(AMM):
     self.probability = self.no_reserves / (self.yes_reserves + self.no_reserves)
     self.volume += stake
     self.historical_data.append((datetime.now(), self.probability))
-    if self.historical_data > self.maxlen:
+    if len(self.historical_data) > self.maxlen:
       self.historical_data = self.historical_data[1:]
     return tokens_purchased
