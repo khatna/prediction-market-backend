@@ -34,6 +34,11 @@ class AMM:
       volume=self.volume,
       history=self.historical_data,
     )
+  
+  def add_historical_data(self):
+    self.historical_data.append((datetime.now(), self.probability))
+    if len(self.historical_data) > self.maxlen:
+      self.historical_data = self.historical_data[1:]
 
 '''
 Constant product market maker (like Uniswap):
@@ -74,7 +79,5 @@ class CPMM(AMM):
     self.no_reserves = tmp_no_reserves
     self.probability = self.no_reserves / (self.yes_reserves + self.no_reserves)
     self.volume += stake
-    self.historical_data.append((datetime.now(), self.probability))
-    if len(self.historical_data) > self.maxlen:
-      self.historical_data = self.historical_data[1:]
+    self.add_historical_data()
     return tokens_purchased
