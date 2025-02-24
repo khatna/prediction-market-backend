@@ -12,6 +12,7 @@ class AMM:
   volume: float
   historical_data: list[(datetime, float)]
   probability: float = 0.5
+  maxlen = 500
   
   def __init__(self, market_id: str, seed_data: models.MarketSeedData):
     self.market_id = market_id
@@ -74,4 +75,6 @@ class CPMM(AMM):
     self.probability = self.no_reserves / (self.yes_reserves + self.no_reserves)
     self.volume += stake
     self.historical_data.append((datetime.now(), self.probability))
+    if self.historical_data > self.maxlen:
+      self.historical_data = self.historical_data[1:]
     return tokens_purchased
