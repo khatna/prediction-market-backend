@@ -46,9 +46,9 @@ class CPMM(AMM):
 
   def __init__(self, market_id: str, seed_data: models.MarketSeedData):
     super().__init__(market_id, seed_data)
-    self.yes_reserves = 100
-    self.no_reserves = 100
-    self.k = 100 * 100
+    self.yes_reserves = 500
+    self.no_reserves = 500
+    self.k = self.yes_reserves * self.no_reserves
     self.probability = 0.5
     self.historical_data.append((datetime.now(), 0.5))
 

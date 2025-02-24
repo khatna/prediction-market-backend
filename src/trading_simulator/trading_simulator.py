@@ -16,7 +16,7 @@ class SimulatedTrader:
             
     perceived_probability = ground_truths[market_data.id] + self.bias
     is_yes = perceived_probability > market_data.probability
-    stake = round(random.uniform(5, 20), 2)
+    stake = round(random.uniform(10, 30), 2)
 
     return {
         'market_id': market_data.id,
